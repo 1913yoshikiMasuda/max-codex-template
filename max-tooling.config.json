@@ -1,0 +1,12 @@
+{
+  "maxProjects": [
+    "max-codex-template.maxproj"
+  ],
+  "patches": [
+    "patchers/**/*.maxpat"
+  ],
+  "exclude": [
+    "**/*.maxhelp"
+  ],
+  "lintBaseline": "maxpat-lint-baseline.json"
+}

@@ -5,12 +5,20 @@
   "description": "A practical Max 9 project template for human/Codex collaboration",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "build": "npm run max:build",
+    "typecheck": "npm run max:typecheck",
+    "test": "npm run max:test",
+    "max:build": "tsc -p tsconfig.max-tools.json",
+    "max:typecheck": "tsc -p tsconfig.max-tools.json --noEmit",
+    "max:test": "node --import tsx --test tests/*.test.ts",
     "max:help": "tsx tools/max-help-search/cli.ts",
+    "max:project:check": "tsx tools/max-project/cli.ts",
     "max:inspect": "tsx tools/maxpat-inspect/cli.ts",
+    "max:inspect:all": "tsx tools/maxpat-inspect/project-cli.ts",
     "max:lint": "tsx tools/maxpat-lint/cli.ts",
-    "test": "node --import tsx --test tests/*.test.ts"
+    "max:lint:all": "tsx tools/maxpat-lint/project-cli.ts",
+    "max:lint:baseline": "tsx tools/maxpat-lint/baseline.ts",
+    "max:lint:baseline:update": "tsx tools/maxpat-lint/baseline.ts --write"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",

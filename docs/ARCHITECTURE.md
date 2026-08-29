@@ -1,17 +1,19 @@
 # Template architecture
 
-The intended lifecycle is:
+想定するlifecycleは次のとおりです。
 
 ```text
 max-codex-template
-        ↓ copy or repository template
-individual-max-project (independent Git repository)
+        ↓ copyまたはrepository template
+individual-max-project（独立したGit repository）
 ```
 
-One repository represents one work, system, or engagement. It may contain several top-level patches, abstractions, media assets, JavaScript, externals, and project documentation. “One patch = one repository” is not the rule.
+1つのrepositoryは、1つの作品、system、または案件を表します。複数のtop-level patch、abstraction、media asset、JavaScript、external、project documentationを含められます。「1 patch = 1 repository」というルールではありません。
 
-The tools share only a narrow parser. Inspection and linting consume the same in-memory representation and never rewrite source files. The help searcher is independent because it searches an installed Max tree rather than parsing a project patch. This separation keeps the template small while allowing a future generator to use the parser types without coupling generation to lint output.
+tool間で共有するのは、小さなread-only parserだけです。inspectionとlintは同じ `.maxpat` 表現を使用し、source fileを書き換えません。project-level commandは、`max-tooling.config.json` から `.maxproj` とpatch globを解決します。Max Project checkerは、Maxが管理するproject contentと、独立して設定されたtooling側のpatch集合を比較します。どちらかが暗黙にもう一方を置き換えることはありません。help searcherはproject patchをparseせず、インストール済みMax treeを検索するため独立しています。この分離によりtemplateを小さく保ちつつ、将来generatorを追加する場合も、generationをlint outputへ結合せずにparser typeを再利用できます。
 
-Projects copied from the template do not reference this repository as a submodule. This prevents tooling version changes from silently affecting active works and lets project-specific conventions evolve. If the parser, linter, and search tool mature across several projects, they may later move into a separately versioned `max-codex-tools` package/repository.
+lint baselineはcommitされるregression記録であり、formatting目標ではありません。errorの増加はfailureです。warningとcodeごとの差分は、表示されるinformational情報として残ります。baselineの更新は明示操作に限定されるため、通常のcheckでproject stateが書き換わることはありません。
 
-Likely future extension points are configuration-file loading around the centralized lint defaults, a declarative patch-spec writer that preserves unknown fields, and Max-aware integration tests. None is required by the current template.
+templateからcopyしたprojectは、このrepositoryをsubmoduleとして参照しません。これによりtooling versionの変更が進行中の作品へ暗黙に影響することを防ぎ、project固有規約を独立して発展させられます。parser、linter、search toolが複数projectで成熟した場合は、将来、別途version管理する `max-codex-tools` package/repositoryへ移動できます。
+
+今後の拡張候補は、external/bpatcher dependency inventory、未知fieldを保持するdeclarative patch-spec writer、Max-aware integration testです。現在のtemplateでは、いずれも必須ではありません。

@@ -1,35 +1,35 @@
 # Patching style
 
-This guide makes a patch legible both as a two-dimensional Max program and as structured data reviewed by tools.
+このguideは、2次元のMax programとしても、toolがレビューするstructured dataとしても、patchを読みやすくするためのものです。
 
-## Flow and sections
+## Flowとsection
 
-Within a DSP lane, place sources above processors and sinks below them. Across larger stages—input, analysis, transformation, output—prefer left-to-right progression. A section should not reverse its dominant direction merely to save space.
+DSP lane内ではsourceをprocessorの上に、sinkをその下に配置します。input、analysis、transformation、outputのような大きなstage間は、左から右へ進めます。space節約だけを理由に、sectionの主要方向を反転させないでください。
 
-Separate DSP and control regions spatially. Place control sources beside the objects they govern, while keeping signal trunks visually continuous. Use comments as section headings above a block, aligned to the same 20 px grid. Comments should describe intent, constraints, or rationale rather than restating box text.
+DSPとcontrolの領域を空間的に分けます。control sourceは操作対象objectの近くに配置し、signal trunkは見た目にも連続させます。commentはblock上部のsection headingとして、同じ20 px gridに揃えます。box textの言い換えではなく、意図、制約、または理由を説明してください。
 
-Use at least 40 px vertical clearance between processing steps and 80 px between major lanes. Leave additional room for multi-inlet fan-in. Align repeated structures and keep object boxes from overlapping.
+processing step間は縦に40 px以上、主要lane間は80 px以上空けます。複数inletへのfan-inには追加のspaceを確保します。繰り返し構造を揃え、object boxを重ねないでください。
 
-## Cords and routing
+## Cordとrouting
 
-Prefer short, direct patch cords and stable outlet-to-inlet ordering. Crossings are sometimes unavoidable, but repeated crossings indicate that lanes, object order, or module boundaries should change. Do not hide a cord to make an unclear layout appear clean.
+短く直接的なpatch cordと、安定したoutlet-to-inlet順序を優先します。交差を完全には避けられない場合もありますが、繰り返し交差する場合は、lane、object順序、module境界を見直してください。不明瞭なlayoutをきれいに見せるためにcordを隠してはいけません。
 
-Use `send`/`receive` when a visible long-distance cord would obscure the architecture, or when named module-level routing is genuinely clearer. Names must express domain meaning and should be scoped where collisions are possible. Do not replace a locally readable connection with anonymous wireless routing.
+見える長距離cordがarchitectureを見えにくくする場合、または名前付きmodule-level routingの方が明確な場合に `send`/`receive` を使用します。名前はdomain上の意味を表し、衝突の可能性がある場合はscopeを限定します。局所的に読みやすいconnectionを、意味のないwireless routingへ置き換えないでください。
 
-## Module choice
+## Moduleの選択
 
-- Use a **subpatcher** to fold implementation detail that belongs only to its parent patch and benefits from being stored inline.
-- Use an **abstraction** for a reusable or independently testable unit with a deliberate inlet/outlet contract.
-- Use a **bpatcher** when a reusable patch also owns a visible embedded UI surface.
+- **subpatcher** は、親patchだけに属し、inlineで保存することに意味がある実装詳細を畳み込む場合に使用します。
+- **abstraction** は、明確なinlet/outlet contractを持つ、再利用可能または独立してtest可能なunitに使用します。
+- **bpatcher** は、再利用可能なpatchが、埋め込み表示するUI surfaceも所有する場合に使用します。
 
-Consider extraction when a coherent block exceeds roughly 12–15 objects, has several crossings, or can be named more clearly than it can be laid out.
+まとまりのあるblockが約12〜15 objectを超える、複数の交差がある、またはlayoutより名前で明確に表現できる場合は、moduleへの抽出を検討してください。
 
-## UI and Presentation Mode
+## UIとPresentation Mode
 
-Patching Mode is the engineering diagram. Presentation Mode is the operator interface. Build a stable signal/control architecture first, then expose only necessary controls and feedback in Presentation Mode. Keep purely decorative UI out of the patching flow and do not depend on presentation coordinates to explain execution.
+Patching Modeはengineering diagramです。Presentation Modeはoperator interfaceです。まず安定したsignal/control architectureを作り、その後、必要なcontrolとfeedbackだけをPresentation Modeへ公開します。純粋に装飾的なUIをpatching flowへ置かず、実行内容の説明をpresentation座標に依存させないでください。
 
-Color may reinforce grouping or state, but labels, alignment, whitespace, and topology must remain sufficient without it. Use standard UI components where possible; give controls semantic `varname` values when automation or scripting refers to them.
+色はgroupやstateの補助に使用できますが、label、alignment、whitespace、topologyだけでも意味が分からなければなりません。可能な限りstandard UI componentを使用し、automationまたはscriptingが参照するcontrolにはsemanticな `varname` を付けてください。
 
 ## Debugging
 
-Place temporary `print`, meters, probes, and test-message objects near the boundary being investigated, and label non-obvious probes. Remove them before delivery. If diagnostics are an intentional feature, isolate them in a named section or module and ensure they do not alter normal timing or signal flow.
+一時的な `print`、meter、probe、test-message objectは、調査対象の境界付近に配置し、自明でないprobeにはlabelを付けます。納品前に削除してください。診断機能を意図して残す場合は、名前付きsectionまたはmoduleへ分離し、通常時のtimingやsignal flowを変更しないようにします。

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "patches": {
+    "patchers/main.maxpat": {
+      "errors": 0,
+      "warnings": 0,
+      "warningCodes": {}
+    }
+  }
+}
