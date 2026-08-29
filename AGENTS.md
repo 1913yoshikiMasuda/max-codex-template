@@ -54,6 +54,7 @@ Max Project file、patch探索範囲、baseline pathは `max-tooling.config.json
 - Max toolingは `tsconfig.max-tools.json` に分離し、application側のTypeScript設定から独立させてください。
 - 既存作品を編集する前に、保護対象file、signal/control flow、起動順序、port、environment variable、external、message schema、selector、安定したobject IDを、project固有の `AGENTS.md` に記録してください。
 - patchが `node.script` を使用する場合は、scriptが明示的なready signalを出すまでoperation messageを送らないでください。startupの責務が `script start` と `@autostart 1` のどちらにあるかを維持し、暗黙に併用または切り替えないでください。
+- `node.script`のentry pointは`.js`または`.mjs`だけを使用し、`.cjs`は使用しないでください。repositoryが`"type": "module"`の場合は`.js`をESMとして記述します。
 - Node for Maxまたはbrowser bridgeが存在する場合は、parse/normalize/serialize logicをMax、socket、processの副作用から分離し、Maxを起動せずにprotocol fixtureを実行できるようにしてください。
 
 ## 新規プロジェクトのbootstrap

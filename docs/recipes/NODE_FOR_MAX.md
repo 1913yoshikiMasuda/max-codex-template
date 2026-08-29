@@ -2,6 +2,12 @@
 
 projectに `node.script` が含まれる場合に、この任意recipeを使用します。Maxだけで完結する作品では必要ありません。
 
+## Entry fileの拡張子
+
+- `node.script`へ渡すentry pointは、Node for Maxの公式仕様にある`.js`または`.mjs`を使用してください。
+- `.cjs`は`node.script`のentry pointとして使用しないでください。CommonJSで実装する場合もentry fileは`.js`にし、ESMを明示する場合は`.mjs`または`package.json`の`type`設定と整合する`.js`を使用します。
+- repositoryが`"type": "module"`の場合、`.js` entryはESMとして記述し、`max-api`はES module importで読み込みます。
+
 ## Startupの責務
 
 startupを担当する方法を1つ選び、記録してください。
@@ -44,6 +50,15 @@ load patch
 - configuration defaultとoverrideの解決
 
 公開selector、message順序、JSON field名、port、query parameter、environment variableはexternal interfaceです。taskがprotocol migrationを明示的に許可しない限り維持してください。
+
+## MaxからNodeへ渡すmacOS path
+
+`opendialog`などが返すpathは、macOS上でも`Macintosh HD:/Users/...`のようなMaxのvolume表現や、symbol内のbackslash escapeを含む場合があります。そのままNodeの`path.resolve()`へ渡すとentry fileのdirectoryからの相対pathとして扱われます。
+
+- filesystem APIを呼ぶ前に、Max atomの復元とpath normalizationを副作用のないmoduleで行います。
+- 起動volumeは`/Users/...`などのPOSIX absolute path、外付けvolumeは`/Volumes/<volume-name>/...`を候補として実在確認します。
+- space、underscoreなどを含む実例をfixture testに固定します。
+- Max側では必要に応じて`conformpath`を使いますが、Node側の境界でも受信形式を検証します。
 
 ## Fixture test
 
