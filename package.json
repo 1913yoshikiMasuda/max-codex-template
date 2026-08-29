@@ -2,6 +2,7 @@
   "name": "max-codex-template",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "description": "A practical Max 9 project template for human/Codex collaboration",
   "type": "module",
   "scripts": {

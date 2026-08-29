@@ -87,3 +87,7 @@ maxpat-lint-baseline.json commitするlint regression baseline
 ```
 
 `.maxproj` の扱いは [docs/MAX_PROJECT_WORKFLOW.md](docs/MAX_PROJECT_WORKFLOW.md) を参照してください。既存のNode/Vite/React repositoryへ導入する場合は [docs/ADDITIVE_MIGRATION.md](docs/ADDITIVE_MIGRATION.md) に従ってください。`node.script` を利用するprojectでは [docs/recipes/NODE_FOR_MAX.md](docs/recipes/NODE_FOR_MAX.md) も適用してください。
+
+## License
+
+MIT Licenseです。詳しくは [LICENSE](LICENSE) を参照してください。
