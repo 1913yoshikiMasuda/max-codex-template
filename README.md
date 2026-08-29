@@ -2,6 +2,12 @@
 
 Max developerとCodexが共同で作業するための、小さく実用的なMax 9プロジェクト基盤です。成果物を `.maxpat` のまま維持しながら、構造とlayoutをレビュー可能にするread-onlyのTypeScript toolを提供します。
 
+<!-- project-bootstrap:start -->
+## 新規プロジェクトの初期設定
+
+このrepositoryは未初期化のtemplateです。AI agentへ作りたい作品を説明すると、既に提供された情報を利用し、不足項目だけを日本語で質問します。設定内容のpreviewを確認した後、agentが `npm run project:init` を実行して作品固有のrepositoryへ初期化します。詳しくは [docs/PROJECT_BOOTSTRAP.md](docs/PROJECT_BOOTSTRAP.md) を参照してください。
+<!-- project-bootstrap:end -->
+
 ## クイックスタート
 
 Node.js 20以降が必要です。help検索には、ローカルへインストールされたMaxも必要です。
@@ -27,12 +33,26 @@ MAX_HOME=/path/to/Max.app npm run max:help -- pfft~
 
 1. このtemplateから新しいrepositoryを作成します。またはGit historyを含めずにcopyします。
 2. 作品またはsystemに合わせてrepository名を変更します。
-3. 同梱の `.maxproj` をrenameするか、既存のMax Projectをrepositoryへ配置します。
-4. project固有の制約とdependencyを `AGENTS.md` に追記します。
-5. `.maxproj` fileと、すべてのproduction patchまたはpatch globを `max-tooling.config.json` に設定します。
-6. `npm run max:lint:baseline:update` を明示的に実行し、最初のlint baselineを記録します。
-7. repository rootをVS Codeで開きます。
-8. objectの動作が不明な場合はローカルMax referenceの確認を必須条件として、Codexへ実装を依頼します。
+3. repository rootをCodexで開き、作りたい作品を説明します。
+4. Codexから不足情報を質問された場合は回答し、提示された初期化previewを確認します。
+5. Codexが `project:init --write` と必須checkを実行した後、作品の設計と実装へ進みます。
+
+手動で初期化する場合も、まずpreviewを実行してください。list optionは必要な回数だけ繰り返せます。
+
+```bash
+npm run project:init -- \
+  --name "Spectral Garden Synth" \
+  --slug spectral-garden-synth \
+  --description "演奏で音響構造が育つシンセサイザー" \
+  --type max-audio \
+  --input MIDI \
+  --output "stereo audio" \
+  --runtime "Max 9" \
+  --safety "起動時は無音" \
+  --first-feature "安全な単音voice"
+```
+
+previewを確認後、同じcommandへ `--write` を追加すると初期化します。初期化済みrepositoryへの再実行は拒否されます。
 
 repositoryの単位は、1つの作品、system、またはclient projectです。1つのpatchに限定しません。copy後の各projectは独立したGit repositoryであり、このtemplateをsubmoduleとして利用する想定ではありません。詳しくは [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) を参照してください。
 
@@ -53,8 +73,10 @@ repositoryの単位は、1つの作品、system、またはclient projectです�
 
 ```text
 docs/                 workflowとpatchingの指針
+.codex/project-bootstrap.json 対話型初期化の状態
 patchers/main.maxpat  standard objectだけを使った検証済みsample
 tools/shared/         小さく再利用可能なmaxpat parser
+tools/project-bootstrap/ 一度限りのproject初期化CLI
 tools/maxpat-inspect/ structure inspection CLI
 tools/maxpat-lint/    diagnostics CLIと集約されたthreshold
 tools/max-help-search/local Max resourceの検索

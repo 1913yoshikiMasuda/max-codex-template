@@ -2,6 +2,12 @@
 
 このリポジトリに対するすべての変更には、以下のルールを適用してください。妥当だが未知の `.maxpat` フィールドを保持し、小さくレビュー可能な変更を優先してください。
 
+<!-- project-bootstrap:start -->
+## Project固有情報
+
+このrepositoryは未初期化のtemplateです。作品固有情報は、初回のbootstrap対話後にここへ記録されます。
+<!-- project-bootstrap:end -->
+
 ## AGENTS.mdの確認通知
 
 - このファイルを読んだターンでは、最初のユーザー向け応答に必ず「私はAGENTS.mdを確認しました。」と記載してください。
@@ -49,3 +55,14 @@ Max Project file、patch探索範囲、baseline pathは `max-tooling.config.json
 - 既存作品を編集する前に、保護対象file、signal/control flow、起動順序、port、environment variable、external、message schema、selector、安定したobject IDを、project固有の `AGENTS.md` に記録してください。
 - patchが `node.script` を使用する場合は、scriptが明示的なready signalを出すまでoperation messageを送らないでください。startupの責務が `script start` と `@autostart 1` のどちらにあるかを維持し、暗黙に併用または切り替えないでください。
 - Node for Maxまたはbrowser bridgeが存在する場合は、parse/normalize/serialize logicをMax、socket、processの副作用から分離し、Maxを起動せずにprotocol fixtureを実行できるようにしてください。
+
+## 新規プロジェクトのbootstrap
+
+- 通常作業の前に `.codex/project-bootstrap.json` を確認してください。`status` が `uninitialized` の場合は、実装を開始せずbootstrapを行います。ただし、ユーザーがこのtemplate自体の保守または改善を明示的に依頼した場合は、未初期化状態を維持したままtemplate作業を行ってください。
+- ユーザーの依頼から、作品名、slug、概要、project type、input、output、runtime構成、external/package、安全要件、最初に実装する小さな機能を抽出してください。既に提供された情報を再質問してはいけません。
+- 不足している必須情報だけを日本語で質問してください。external/packageが不要または未定の場合は、空のまま初期化できます。
+- 回答が揃ったら、最初に `npm run project:init -- ...` を `--write` なしで実行します。変更予定をユーザーへ提示し、確認を得てから同じcommandへ `--write` を追加してください。
+- bootstrap後は `package.json`、`package-lock.json`、README、Project固有情報、`docs/PROJECT_BRIEF.md`、`max-tooling.config.json`、bootstrap stateが作品固有の値になったことを確認してください。
+- templateに含まれるplaceholder `.maxproj` に限り、bootstrap commandによる一度だけのproject名変更とfile renameを許可します。初期化後の `.maxproj` はMaxが管理するread-only fileとして扱い、toolingから書き換えてはいけません。
+- `status` が `initialized` の場合はbootstrapを再実行せず、現在のproject情報をtruthとして通常作業を進めてください。
+- 初期化後に必須checkを実行し、`git diff` で意図したfileだけが変更されたことを確認してください。

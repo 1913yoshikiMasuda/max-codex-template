@@ -8,6 +8,7 @@
     "build": "npm run max:build",
     "typecheck": "npm run max:typecheck",
     "test": "npm run max:test",
+    "project:init": "tsx tools/project-bootstrap/cli.ts",
     "max:build": "tsc -p tsconfig.max-tools.json",
     "max:typecheck": "tsc -p tsconfig.max-tools.json --noEmit",
     "max:test": "node --import tsx --test tests/*.test.ts",
