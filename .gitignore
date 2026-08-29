@@ -1,0 +1,24 @@
+# macOS / editors
+.DS_Store
+._*
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Node / generated tooling output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+
+# Max backup and crash artefacts (project sources remain tracked)
+*.maxpat~
+*.maxproj~
+*.amxd~
+*.crash
+
+# Local configuration
+.env
+.env.local

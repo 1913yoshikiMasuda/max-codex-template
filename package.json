@@ -1,0 +1,23 @@
+{
+  "name": "max-codex-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A practical Max 9 project template for human/Codex collaboration",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "max:help": "tsx tools/max-help-search/cli.ts",
+    "max:inspect": "tsx tools/maxpat-inspect/cli.ts",
+    "max:lint": "tsx tools/maxpat-lint/cli.ts",
+    "test": "node --import tsx --test tests/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
