@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { applyBootstrapPlan, createBootstrapPlan, type ProjectAnswers } from "../tools/project-bootstrap/core.js";
 
@@ -19,7 +19,9 @@ const answers: ProjectAnswers = {
 };
 
 async function createTemplateFixture(): Promise<string> {
-  const root = await mkdtemp(join(tmpdir(), "max-project-bootstrap-"));
+  const container = await mkdtemp(join(tmpdir(), "max-project-bootstrap-"));
+  const root = join(container, answers.slug);
+  await mkdir(root);
   await mkdir(join(root, ".codex"), { recursive: true });
   await mkdir(join(root, "docs"), { recursive: true });
   await writeFile(join(root, ".codex", "project-bootstrap.json"), JSON.stringify({
@@ -66,7 +68,7 @@ test("bootstrap preview validates and plans changes without writing", async () =
     assert.equal(await readFile(join(root, "package.json"), "utf8"), before);
     await assert.rejects(readFile(join(root, "spectral-garden-synth.maxproj"), "utf8"));
   } finally {
-    await rm(root, { recursive: true, force: true });
+    await rm(dirname(root), { recursive: true, force: true });
   }
 });
 
@@ -93,10 +95,22 @@ test("bootstrap write updates project identity, preserves maxproj fields, and re
     assert.match(await readFile(join(root, "docs", "PROJECT_BRIEF.md"), "utf8"), /安全な単音voice/);
     await assert.rejects(createBootstrapPlan(root, answers), /already initialized/);
   } finally {
-    await rm(root, { recursive: true, force: true });
+    await rm(dirname(root), { recursive: true, force: true });
   }
 });
 
 test("bootstrap rejects an unsafe slug before reading or writing repository files", async () => {
   await assert.rejects(createBootstrapPlan(".", { ...answers, slug: "Unsafe Name" }), /slug must use lowercase ASCII/);
+});
+
+test("bootstrap rejects a project folder that does not match the Max Project slug", async () => {
+  const root = await createTemplateFixture();
+  try {
+    await assert.rejects(
+      createBootstrapPlan(root, { ...answers, slug: "different-project-name" }),
+      /Max requires the project folder name to match the \.maxproj name/
+    );
+  } finally {
+    await rm(dirname(root), { recursive: true, force: true });
+  }
 });

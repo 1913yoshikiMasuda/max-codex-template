@@ -160,6 +160,12 @@ async function readJson(path: string, label: string): Promise<JsonObject> {
 export async function createBootstrapPlan(rootArgument: string, input: ProjectAnswers): Promise<BootstrapPlan> {
   const root = resolve(rootArgument);
   const answers = validateAnswers(input);
+  const rootFolderName = basename(root);
+  if (rootFolderName !== answers.slug) {
+    throw new Error(
+      `Max requires the project folder name to match the .maxproj name. Rename folder "${rootFolderName}" to "${answers.slug}" before bootstrap.`
+    );
+  }
   const statePath = resolve(root, ".codex/project-bootstrap.json");
   const state = await readJson(statePath, "bootstrap state") as unknown as BootstrapState;
   if (state.schemaVersion !== 1) throw new Error("Unsupported project bootstrap schemaVersion.");
@@ -220,7 +226,7 @@ export async function createBootstrapPlan(rootArgument: string, input: ProjectAn
     throw new Error(`README.md must still start with ${templateReadmeTitle} before initialization.`);
   }
   const projectReadme = `# ${answers.name}${readme.slice(templateReadmeTitle.length)}`;
-  const readmeProject = `## ${answers.name}\n\n${answers.description}\n\nProject type: ${answers.type}  \nMax Project: \`${newMaxProjectName}\`  \n詳細は [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) を参照してください。`;
+  const readmeProject = `## ${answers.name}\n\n${answers.description}\n\nProject type: ${answers.type}\n\nMax Project: \`${newMaxProjectName}\`\n\n詳細は [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) を参照してください。`;
   const agentsProject = `## Project固有情報\n\n- 作品名: ${answers.name}\n- 概要: ${answers.description}\n- Project type: ${answers.type}\n- Input: ${answers.inputs.join(" / ")}\n- Output: ${answers.outputs.join(" / ")}\n- Runtime: ${answers.runtimes.join(" / ")}\n- External / package: ${answers.externals.join(" / ") || "なし"}\n- 安全要件: ${answers.safety.join(" / ")}\n- 最初の機能: ${answers.firstFeature}\n- 詳細: \`docs/PROJECT_BRIEF.md\`\n\n実装によりinterface、dependency、起動順序、port、または保護対象fileが確定したら、このsectionまたは関連documentationへ追記してください。`;
   const initializedState: InitializedState = {
     schemaVersion: 1,

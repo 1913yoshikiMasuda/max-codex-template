@@ -8,10 +8,11 @@
 
 1. ユーザーの最初の依頼から、作品名、slug、概要、project type、input、output、runtime構成、external/package、安全要件、最初の小規模機能を抽出します。
 2. 依頼文だけでは分からない必須項目に限って質問します。提供済みの情報は再質問しません。
-3. 回答が揃ったら、`npm run project:init -- ...` を `--write` なしで実行します。
-4. agentは、検証済みの設定値と変更予定fileをユーザーへ提示します。
-5. ユーザーの確認後、同じcommandへ `--write` を追加して実行します。
-6. Max toolingの必須checkと `git diff` の監査を行ってから、作品の設計または実装へ進みます。
+3. repositoryの格納folder名がslugと一致することを確認し、不一致ならbootstrap前にfolderをrenameしてworkspaceを開き直します。
+4. 回答が揃ったら、`npm run project:init -- ...` を `--write` なしで実行します。
+5. agentは、検証済みの設定値と変更予定fileをユーザーへ提示します。
+6. ユーザーの確認後、同じcommandへ `--write` を追加して実行します。
+7. Max toolingの必須checkと `git diff` の監査を行ってから、作品の設計または実装へ進みます。
 
 ## 必須情報
 
@@ -32,6 +33,7 @@
 
 write前には以下を確認します。
 
+- repositoryの格納folder名がslugと完全一致する（Maxはfolder名と`.maxproj`名が異なるProjectの読み込みを拒否する）
 - bootstrap stateが `uninitialized` である
 - `package.json` と `package-lock.json` がtemplate名のままである
 - placeholder `.maxproj` が存在し、内部project名がtemplate名のままである
@@ -50,6 +52,8 @@ write前には以下を確認します。
 - 最後にbootstrap stateを `initialized` へ変更
 
 bootstrap stateは最後に書き込まれます。初期化済みrepositoryに対する再実行はfailureになります。
+
+folder名がslugと異なる場合、previewも明示的なerrorで停止します。bootstrap commandはworkspaceの場所を暗黙に変更しないため、folder renameはユーザー確認後に別操作として行い、新しいpathでworkspaceを開き直してからpreviewを再実行してください。
 
 ## `.maxproj` の例外規則
 

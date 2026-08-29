@@ -62,6 +62,7 @@ Max Project file、patch探索範囲、baseline pathは `max-tooling.config.json
 - 通常作業の前に `.codex/project-bootstrap.json` を確認してください。`status` が `uninitialized` の場合は、実装を開始せずbootstrapを行います。ただし、ユーザーがこのtemplate自体の保守または改善を明示的に依頼した場合は、未初期化状態を維持したままtemplate作業を行ってください。
 - ユーザーの依頼から、作品名、slug、概要、project type、input、output、runtime構成、external/package、安全要件、最初に実装する小さな機能を抽出してください。既に提供された情報を再質問してはいけません。
 - 不足している必須情報だけを日本語で質問してください。external/packageが不要または未定の場合は、空のまま初期化できます。
+- Maxは格納folder名と`.maxproj`名が異なるProjectの読み込みを拒否します。bootstrap preview前にrepositoryのfolder名がslugと完全一致することを確認し、不一致ならユーザー確認を得てfolderをrenameし、新しいpathでworkspaceを開き直してください。bootstrap commandに暗黙のfolder renameを追加してはいけません。
 - 回答が揃ったら、最初に `npm run project:init -- ...` を `--write` なしで実行します。変更予定をユーザーへ提示し、確認を得てから同じcommandへ `--write` を追加してください。
 - bootstrap後は `package.json`、`package-lock.json`、README、Project固有情報、`docs/PROJECT_BRIEF.md`、`max-tooling.config.json`、bootstrap stateが作品固有の値になったことを確認してください。
 - templateに含まれるplaceholder `.maxproj` に限り、bootstrap commandによる一度だけのproject名変更とfile renameを許可します。初期化後の `.maxproj` はMaxが管理するread-only fileとして扱い、toolingから書き換えてはいけません。
